@@ -1,10 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>게시글 리스트 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .all {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px; /* 전체 패딩 추가 */
+        }
+        h2 {
+            text-align: center;
+        }
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px; /* 사진 썸네일과 제목 위쪽 여백 추가 */
+        }
+        .thumbnail-item {
+            width: 30%; /* 한 줄에 3개의 사진 썸네일이 오도록 설정 */
+            margin-bottom: 20px;
+            text-align: center; /* 제목 가운데 정렬 */
+        }
+        .thumbnail-item img {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            height: auto;
+        }
+        .thumbnail-item p {
+            margin-top: 10px; /* 제목과 사진 간격 추가 */
+            overflow: hidden;
+            text-overflow: ellipsis; /* 최대 20자로 잘리면 생략 표시 */
+            white-space: nowrap; /* 한 줄로만 표시 */
+        }
+        .upload-button {
+            float: right; /* 우측 정렬 */
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-
+<div class="all">
+    <h2>게시판 리스트</h2>
+    <button class="upload-button" type="button" onclick="location.href='/upload'">사진 올리기</button>
+    <div class="thumbnail-container">
+        <th:block th:each="board : ${boardList}">
+            <div class="thumbnail-item">
+                <a th:href="@{'/viewer/' + ${board.boardId}}">
+                    <img th:src="@{${board.imageLink}}" alt="Board Image">
+                </a>
+                <a th:href="@{'/viewer/' + ${board.boardId}}">
+                    <p th:text="${board.title}"></p>
+                </a>
+            </div>
+        </th:block>
+    </div>
+</div>
 </body>
 </html>

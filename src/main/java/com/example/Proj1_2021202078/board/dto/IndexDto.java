@@ -19,11 +19,12 @@ public class IndexDto {
 
     public IndexDto() {}
 
-    public IndexDto(Board board, BoardImage image) {
+    public IndexDto(Board board, Long imageId, String imageLink) {
+
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
         this.createdAt = board.getCreatedAt();
-        this.ImageId = image.getImageId();
-        this.ImageLink = image.getImageLink();
+        this.ImageId = imageId;
+        this.ImageLink = imageLink;
     }
 }

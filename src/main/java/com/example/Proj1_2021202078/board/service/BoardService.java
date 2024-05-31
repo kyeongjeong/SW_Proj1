@@ -15,6 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -40,13 +41,14 @@ public class BoardService {
 
                 List<BoardImage> images = imageRepository.findAllByBoard_BoardId(board.getBoardId());
                 BoardImage image;
+                IndexDto indexDto;
                 if(images != null && !images.isEmpty()) {
                     image = images.get(0);
+                    indexDto = new IndexDto(board, image.getImageId(), image.getImageLink());
                 }
                 else {
-                    image = null;
+                    indexDto = new IndexDto(board, null, null);
                 }
-                IndexDto indexDto = new IndexDto(board, image);
                 indexDtos.add(indexDto);
             }
         }
@@ -54,20 +56,18 @@ public class BoardService {
     }
 
     public Long uploadBoard(CreateBoardDto createBoardDto) {
-
         try {
             Board board = new Board(createBoardDto);
             boardRepository.saveAndFlush(board);
 
             if (createBoardDto.getImageLinks() != null && !createBoardDto.getImageLinks().isEmpty()) {
-                for (int i = 0; i < createBoardDto.getImageLinks().size(); i++) {
-                    BoardImage boardImage = new BoardImage(board, createBoardDto.getImageLinks().get(i));
+                for (String imageLink : createBoardDto.getImageLinks()) {
+                    BoardImage boardImage = new BoardImage(board, imageLink);
                     imageRepository.saveAndFlush(boardImage);
                 }
             }
             return board.getBoardId();
-        }
-        catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new RuntimeException("Failed to upload board: " + e.getMessage(), e);
         }
     }

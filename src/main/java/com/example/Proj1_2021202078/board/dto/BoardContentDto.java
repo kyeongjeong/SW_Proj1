@@ -13,7 +13,7 @@ public class BoardContentDto {
 
     private Long boardId;
     private String title;
-    private String conmment;
+    private String comment;
     private LocalDateTime createdAt;
     private List<String> imageLinks;
 
@@ -22,7 +22,7 @@ public class BoardContentDto {
     public BoardContentDto(Board board, List<String> imageLinks) {
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
-        this.conmment = board.getComment();
+        this.comment = board.getComment();
         this.createdAt = board.getCreatedAt();
         this.imageLinks = imageLinks;
     }
